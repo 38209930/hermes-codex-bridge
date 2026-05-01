@@ -2,9 +2,19 @@
 
 本项目的主线是 Hermes + Codex 桥接；OpenClaw 相关内容是可选协作模板和示例工程，不是仓库命名或使用入口。
 
+## 项目范围
+
+本仓库是 Mac 侧独立项目，主线只覆盖：
+
+- macOS
+- Hermes gateway
+- Telegram bridge
+- Codex CLI
+- Codex Plugin 分发
+
 ## 环境要求
 
-- macOS 或 Linux，用于运行 shell 脚本
+- macOS，用于运行 Hermes gateway、launchd 和 bridge 脚本
 - Node.js 22
 - npm
 - OpenClaw
@@ -24,12 +34,6 @@ npm ci
 
 ```bash
 bash -n scripts/*.sh
-```
-
-如果本机可用 PowerShell：
-
-```powershell
-pwsh -NoProfile -File scripts/windows-codex-cli-bootstrap.ps1 -?
 ```
 
 ## OpenClaw 检查

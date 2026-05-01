@@ -139,37 +139,6 @@ hermes --profile telegram-codex gateway restart
 
 这些文件属于本机状态，不能提交到 git。
 
-## Windows：WSL2 + Codex CLI
-
-如果尚未安装 WSL2 Ubuntu，请用管理员模式运行 PowerShell：
-
-```powershell
-wsl --install -d Ubuntu
-```
-
-重启并创建 Ubuntu 用户后，运行：
-
-```powershell
-.\scripts\windows-codex-cli-bootstrap.ps1
-```
-
-也可以直接运行 Ubuntu 侧安装脚本：
-
-```bash
-bash scripts/wsl-install-codex-cli.sh
-codex login
-```
-
-推荐把项目放在 WSL 内部文件系统：
-
-```bash
-mkdir -p ~/projects
-cd ~/projects
-git clone <repo-url>
-```
-
-不建议把高频开发项目放在 `/mnt/c/...` 下，因为性能和权限行为可能不稳定。
-
 ## GitHub 发布
 
 安装 GitHub CLI：
