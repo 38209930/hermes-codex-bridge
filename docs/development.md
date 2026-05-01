@@ -1,64 +1,70 @@
-# Development
+# 开发说明
 
-## Requirements
+## 环境要求
 
-- macOS or Linux for the shell scripts
+- macOS 或 Linux，用于运行 shell 脚本
 - Node.js 22
 - npm
 - OpenClaw
-- Codex CLI for Codex bridge workflows
-- Hermes Agent for Telegram gateway workflows
+- Codex CLI，用于 Codex 桥接流程
+- Hermes Agent，用于 Telegram gateway 流程
 
-Use the included Node version:
+使用仓库指定的 Node 版本：
 
 ```bash
 nvm use
 npm ci
 ```
 
-## Script Checks
+## 脚本检查
 
-Run shell syntax checks before committing:
+提交前运行 shell 语法检查：
 
 ```bash
 bash -n scripts/*.sh
 ```
 
-If PowerShell is available:
+如果本机可用 PowerShell：
 
 ```powershell
 pwsh -NoProfile -File scripts/windows-codex-cli-bootstrap.ps1 -?
 ```
 
-## OpenClaw Check
+## OpenClaw 检查
 
 ```bash
 npm run openclaw -- --version
 ```
 
-## Project Template Flow
+## 项目模板流程
 
-Create a project from the template:
+从模板创建项目：
 
 ```bash
 cp -R projects/_template projects/my-project
 ```
 
-Each project keeps its own:
+每个项目维护自己的：
 
-- requirements
-- delivery plan
-- test plan
-- change log
-- decisions
-- known risks
-- meeting notes
+- 需求说明
+- 交付计划
+- 测试计划
+- 变更记录
+- 决策记录
+- 已知风险
+- 会议纪要
 
-## Contribution Rules
+## 语言约定
 
-- Keep credentials out of git.
-- Keep generated runtime state out of git.
-- Prefer templates over real tenant, app, or user identifiers.
-- Keep bridge commands fixed and explicit; do not add raw shell execution from chat text.
-- Update the docs when changing script flags, environment variables, or command names.
+- 默认使用中文编写对话、计划、执行说明、验收说明、测试报告和项目文档。
+- 代码标识符、命令、API 字段、协议字段和错误原文保持原语言。
+- 注释默认中文，但只在确实有助于理解时添加。
+- commit message 默认中文；如果某个外部项目已有英文规范，则遵守该项目规范。
 
+## 贡献规则
+
+- 凭证不要进入 git。
+- 生成的运行状态不要进入 git。
+- 使用模板占位符，不提交真实租户、应用或用户标识。
+- 桥接命令保持固定和显式，不从聊天文本直接执行 shell。
+- 修改脚本参数、环境变量或命令名时，同步更新文档。

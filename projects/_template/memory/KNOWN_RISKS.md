@@ -1,10 +1,10 @@
-# Known Risks
+# 已知风险
 
-## Template
+## 模板
 
-- Date:
-- Risk:
-- Severity:
-- Owner:
-- Mitigation:
-- Status:
+- 日期：
+- 风险：
+- 严重程度：
+- 负责人：
+- 缓解措施：
+- 状态：

@@ -1,5 +1,11 @@
-# Project Template
+# 项目模板
 
-Copy this directory to `projects/<project-key>` and replace all placeholders.
+把这个目录复制到 `projects/<project-key>`，然后替换所有占位内容。
 
-Work only inside the copied project folder for that project.
+每个项目只在自己的项目目录内工作。
+
+## 语言约定
+
+- 项目文档、计划、验收说明和测试报告默认使用中文。
+- 命令、API 字段、配置项、错误原文保持原语言。
+- 代码标识符沿用项目既有风格，不强行中文化。

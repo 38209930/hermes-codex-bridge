@@ -1,12 +1,12 @@
-# Decisions
+# 决策记录
 
-Record architecture, scope, and product decisions here.
+在这里记录架构、范围和产品决策。
 
-## Template
+## 模板
 
-- Date:
-- Version:
-- Decision:
-- Owner:
-- Reason:
-- Impact:
+- 日期：
+- 版本：
+- 决策：
+- 负责人：
+- 原因：
+- 影响：

@@ -1,64 +1,65 @@
-# Feishu/Lark + OpenClaw
+# 飞书/Lark + OpenClaw
 
-## Goal
+本文默认使用中文说明飞书/Lark 与 OpenClaw 的接入方式。`App ID`、`App Secret`、事件名和配置字段保持原样。
 
-Use Feishu or Lark as the collaboration surface for OpenClaw project work. This repository provides templates and conventions; it does not include real tenant secrets.
+## 目标
 
-## Create The App
+把飞书或 Lark 作为 OpenClaw 项目工作的协作入口。本仓库只提供模板和约定，不包含真实租户密钥。
 
-1. Open the Feishu/Lark developer console.
-2. Create an app for the project.
-3. Enable the bot capability.
-4. Copy the App ID and App Secret into your private runtime config only.
-5. Configure event subscription or websocket mode according to your OpenClaw deployment.
+## 创建应用
 
-## Configuration Template
+1. 打开飞书/Lark 开发者后台。
+2. 为项目创建应用。
+3. 启用 bot 能力。
+4. 只把 `App ID` 和 `App Secret` 写入私有运行配置。
+5. 按 OpenClaw 部署方式配置事件订阅或 websocket 模式。
 
-Start from:
+## 配置模板
+
+从这个模板开始：
 
 ```text
 projects/feishu-openclaw-integration/config/openclaw.feishu.template.json5
 ```
 
-Replace placeholders locally:
+在本地替换占位符：
 
 ```json5
 appId: "REPLACE_WITH_FEISHU_APP_ID",
 appSecret: "REPLACE_WITH_FEISHU_APP_SECRET"
 ```
 
-Use `domain: "feishu"` for China tenants and `domain: "lark"` for international tenants.
+中国区租户使用 `domain: "feishu"`，国际区租户使用 `domain: "lark"`。
 
-## Pairing Flow
+## 配对流程
 
-1. Start or restart OpenClaw gateway.
-2. Private-message the bot.
-3. Approve the pairing code:
+1. 启动或重启 OpenClaw gateway。
+2. 私聊 bot。
+3. 批准 pairing code：
 
    ```bash
    openclaw pairing list feishu
    openclaw pairing approve feishu <CODE>
    ```
 
-4. Add the bot to a project group.
-5. Mention the bot in the group to verify replies.
-6. Record the resulting group chat id in your private config if you need group allow rules.
+4. 把 bot 加入项目群。
+5. 在群里 mention bot，确认它可以回复。
+6. 如果需要群白名单，把得到的 group chat id 记录到私有配置。
 
-## Group Operating Rules
+## 群协作规则
 
-- Use one Feishu group per project.
-- Pin project goal, current scope, project folder path, release status, and requirement change process.
-- Copy decisions from chat into project memory files.
-- Keep `requireMention` enabled during first rollout.
+- 每个项目使用一个飞书群。
+- 置顶项目目标、当前范围、项目目录、发布状态和需求变更流程。
+- 把聊天里的决策同步到项目 memory 文件。
+- 首次上线阶段保持 `requireMention` 开启。
 
-## Secrets
+## 密钥
 
-Never commit:
+不要提交：
 
-- App ID when tied to a private tenant
+- 绑定私有租户的 App ID
 - App Secret
-- verification tokens
-- encrypt keys
-- chat IDs for private groups
-- exported message logs
-
+- verification token
+- encrypt key
+- 私有群 chat ID
+- 导出的消息日志

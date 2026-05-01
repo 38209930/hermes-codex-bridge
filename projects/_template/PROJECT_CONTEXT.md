@@ -1,26 +1,26 @@
-# Project Context
+# 项目上下文
 
-- Project name:
-- Project key:
-- Business owner:
-- Product manager:
-- Project manager:
-- Test engineer:
-- Backend engineer:
-- Frontend engineer:
-- Feishu group:
-- Repository / workspace:
+- 项目名称：
+- 项目标识：
+- 业务负责人：
+- 产品经理：
+- 项目经理：
+- 测试工程师：
+- 后端工程师：
+- 前端工程师：
+- 飞书群：
+- 仓库 / 工作区：
 
-## Goal
-
--
-
-## Non-goals
+## 目标
 
 -
 
-## Current Version
+## 非目标
 
-- Version:
-- Status:
-- Target release date:
+-
+
+## 当前版本
+
+- 版本：
+- 状态：
+- 目标发布日期：

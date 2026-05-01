@@ -1,6 +1,6 @@
-# Open Source Release Checklist
+# 开源发布检查清单
 
-Use this before pushing a public release.
+推送 public release 之前使用这份清单。
 
 ```bash
 bash -n scripts/*.sh
@@ -12,11 +12,10 @@ rg -n --hidden -g '!node_modules/**' -g '!.git/**' -g '!migration/**' -i "(token
 git status --short --ignored
 ```
 
-Expected:
+预期结果：
 
-- no tracked `node_modules/`
-- no tracked `migration/`
-- no tracked `.env`
-- no real tokens or secrets
-- README and docs render cleanly on GitHub
-
+- 没有 tracked `node_modules/`
+- 没有 tracked `migration/`
+- 没有 tracked `.env`
+- 没有真实 token 或 secret
+- README 和 docs 在 GitHub 上能正常渲染

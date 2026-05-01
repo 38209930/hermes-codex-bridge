@@ -1,20 +1,22 @@
-# Security
+# 安全说明
 
-## Files That Must Not Be Committed
+本文默认使用中文记录安全边界、脱敏规则和发布前检查。命令、环境变量和字段名保持原样。
 
-- `.env` and `.env.*`
-- Hermes profile directories and state databases
-- Telegram bot tokens
-- Feishu/Lark App Secret values
-- OpenAI, Ark, or other model provider API keys
-- task queue runtime state
-- logs, PID files, lock files
-- `migration/` or other private data dumps
+## 不能提交的文件
+
+- `.env` 和 `.env.*`
+- Hermes profile 目录和状态数据库
+- Telegram bot token
+- 飞书/Lark App Secret
+- OpenAI、Ark 或其他模型服务商 API key
+- 任务队列运行状态
+- 日志、PID 文件、lock 文件
+- `migration/` 或其他私有数据导出
 - `node_modules/`
 
-## Pre-Publish Scan
+## 发布前扫描
 
-Run:
+运行：
 
 ```bash
 rg -n --hidden \
@@ -24,34 +26,34 @@ rg -n --hidden \
   -i "(token|secret|password|appSecret|api_key|authorization|bearer|TELEGRAM_BOT_TOKEN|ARK_API_KEY|OPENAI_API_KEY)" .
 ```
 
-Expected results should be templates, documentation warnings, or generic field names only.
+预期结果只能是模板占位符、文档警告或通用字段名。
 
-Check ignored files:
+检查 ignored 文件：
 
 ```bash
 git status --short --ignored
 ```
 
-Before publishing, confirm that ignored private paths are not staged:
+发布前确认 ignored 私有路径没有进入暂存区：
 
 ```bash
 git diff --cached --name-only
 ```
 
-## Runtime Safety
+## 运行时安全
 
-The Telegram bridge is intentionally fixed-command based:
+Telegram 桥接刻意采用固定命令模式：
 
-- no raw shell execution from Telegram text
-- no write access in Codex CLI planning mode
-- no dependency install
-- no commit, push, deploy, or migration
+- 不把 Telegram 文本直接当 shell 执行
+- Codex CLI 计划模式没有写权限
+- 不安装依赖
+- 不 commit、push、部署或迁移
 
-Any future write-capable version should require explicit task-id approval and a separate audit trail.
+未来如果加入写文件能力，必须要求明确的 task id 审批，并保留独立审计日志。
 
-## Template Policy
+## 模板策略
 
-Use placeholders such as:
+使用这类占位符：
 
 ```text
 <telegram_bot_token>
@@ -60,5 +62,4 @@ REPLACE_WITH_FEISHU_APP_ID
 REPLACE_WITH_FEISHU_APP_SECRET
 ```
 
-Do not use real examples that look like production credentials.
-
+不要使用看起来像生产凭证的真实示例。

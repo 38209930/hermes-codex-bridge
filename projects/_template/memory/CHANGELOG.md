@@ -1,12 +1,12 @@
-# Changelog
+# 变更记录
 
-## Template
+## 模板
 
-### Version
+### 版本
 
-- Date:
-- Summary:
-- Product impact:
-- Backend impact:
-- Frontend impact:
-- Test impact:
+- 日期：
+- 摘要：
+- 产品影响：
+- 后端影响：
+- 前端影响：
+- 测试影响：

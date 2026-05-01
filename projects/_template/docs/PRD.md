@@ -1,17 +1,17 @@
-# PRD
+# 产品需求文档
 
-## Background
+## 背景
 
-## Problem Statement
+## 问题描述
 
-## Goals
+## 目标
 
-## Users and Scenarios
+## 用户与场景
 
-## Scope
+## 范围
 
-## Out of Scope
+## 不在范围内
 
-## Acceptance Criteria
+## 验收标准
 
-## Open Questions
+## 开放问题

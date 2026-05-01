@@ -1,10 +1,10 @@
-# Meeting Notes
+# 会议纪要
 
-## Template
+## 模板
 
-### Date
+### 日期
 
-- Participants:
-- Topics:
-- Decisions:
-- Action items:
+- 参与人：
+- 议题：
+- 决策：
+- 行动项：

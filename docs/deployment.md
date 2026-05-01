@@ -1,8 +1,10 @@
-# Deployment
+# 部署说明
 
-## Mac: Hermes + Telegram + Codex CLI
+本文默认使用中文记录部署步骤。命令、环境变量和第三方字段保持原样。
 
-Install Codex CLI:
+## Mac：Hermes + Telegram + Codex CLI
+
+安装 Codex CLI：
 
 ```bash
 npm install -g @openai/codex
@@ -10,13 +12,13 @@ codex login
 codex --version
 ```
 
-Create or clone a dedicated Hermes profile for the Telegram bridge:
+为 Telegram 桥接创建或克隆一个独立 Hermes profile：
 
 ```bash
 hermes profile create telegram-codex --clone
 ```
 
-Configure the profile `.env` with your own values:
+在 profile 的 `.env` 中写入自己的配置：
 
 ```bash
 TELEGRAM_BOT_TOKEN=<telegram_bot_token>
@@ -27,59 +29,59 @@ GATEWAY_ALLOW_ALL_USERS=false
 TELEGRAM_ALLOW_ALL_USERS=false
 ```
 
-Set the bridge work directory with an environment variable when the default is not correct:
+如果默认工作目录不正确，用环境变量指定桥接工作目录：
 
 ```bash
 MAC_CODEX_BRIDGE_WORKDIR=/path/to/your/repo
 ```
 
-Start the gateway:
+启动 gateway：
 
 ```bash
 telegram-codex gateway start
 telegram-codex gateway status
 ```
 
-After changing quick commands:
+修改 quick commands 后重启：
 
 ```bash
 telegram-codex gateway restart
 ```
 
-## macOS launchd Notes
+## macOS launchd 注意事项
 
-The Telegram task runner uses `launchctl submit` for background Codex planning jobs. To avoid macOS privacy restrictions on user document folders, the runner copies a script snapshot into the Hermes profile task directory before launching.
+Telegram 任务 runner 使用 `launchctl submit` 启动后台 Codex 计划任务。为了避开 macOS 对用户文档目录的隐私限制，runner 会先把脚本快照复制到 Hermes profile 的任务目录，再启动后台任务。
 
-Runtime files live under:
+运行态文件位于：
 
 ```text
 ~/.hermes/profiles/telegram-codex/workspace/tasks/
 ```
 
-These files are local state and must not be committed.
+这些文件属于本机状态，不能提交到 git。
 
-## Windows: WSL2 + Codex CLI
+## Windows：WSL2 + Codex CLI
 
-Run PowerShell as Administrator if WSL2 Ubuntu is not installed:
+如果尚未安装 WSL2 Ubuntu，请用管理员模式运行 PowerShell：
 
 ```powershell
 wsl --install -d Ubuntu
 ```
 
-After reboot and Ubuntu user creation, run:
+重启并创建 Ubuntu 用户后，运行：
 
 ```powershell
 .\scripts\windows-codex-cli-bootstrap.ps1
 ```
 
-Or run the Ubuntu-side installer directly:
+也可以直接运行 Ubuntu 侧安装脚本：
 
 ```bash
 bash scripts/wsl-install-codex-cli.sh
 codex login
 ```
 
-Recommended project location inside WSL:
+推荐把项目放在 WSL 内部文件系统：
 
 ```bash
 mkdir -p ~/projects
@@ -87,22 +89,21 @@ cd ~/projects
 git clone <repo-url>
 ```
 
-Avoid high-frequency development under `/mnt/c/...` because performance and permission behavior can be uneven.
+不建议把高频开发项目放在 `/mnt/c/...` 下，因为性能和权限行为可能不稳定。
 
-## GitHub Publication
+## GitHub 发布
 
-Install GitHub CLI:
+安装 GitHub CLI：
 
 ```bash
 brew install gh
 gh auth login
 ```
 
-Create and push the public repo:
+创建并推送 public repo：
 
 ```bash
 git add .
 git commit -m "Prepare open source release"
 gh repo create openclaw-codex-bridge --public --source . --remote origin --push
 ```
-

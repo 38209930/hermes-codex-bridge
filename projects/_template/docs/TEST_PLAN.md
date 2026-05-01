@@ -1,13 +1,13 @@
-# Test Plan
+# 测试计划
 
-## Test Scope
+## 测试范围
 
-## Entry Criteria
+## 准入条件
 
-## Exit Criteria
+## 准出条件
 
-## Functional Cases
+## 功能用例
 
-## Regression Scope
+## 回归范围
 
-## Evidence
+## 证据

@@ -1,11 +1,11 @@
-# Delivery Plan
+# 交付计划
 
-## Milestones
+## 里程碑
 
-## Owners
+## 负责人
 
-## Dependencies
+## 依赖
 
-## Risks
+## 风险
 
-## Decisions Needed
+## 待决策事项
