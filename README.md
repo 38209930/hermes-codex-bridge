@@ -1,45 +1,43 @@
 # hermes-codex-bridge
 
-这是一个 Hermes + Codex 桥接工具包，用于把本地 Codex CLI、Telegram 移动审核、任务审批队列和可选的飞书/OpenClaw 协作流程串成一套可复用系统。
+用 Telegram 安全审批 Codex CLI 任务：先只读计划，再显式确认写文件、commit 和 push；普通聊天永远不进入 Codex 队列。
 
-本仓库默认走保守路线：Telegram 普通聊天永远不进入 Codex 队列，飞书凭证只提供模板，本机运行状态不进入 git。V3 支持通过 Telegram 显式审批 Codex CLI 写文件、commit 和 push，但每一步都必须使用固定 `/` 命令、明确 `task_id` 和一次性确认码；deploy 仍然禁用。OpenClaw 是可选协作模板，不是本项目的主入口。
+`hermes-codex-bridge` 是一个 Hermes + Codex CLI 桥接工具包，用于把本地 Codex CLI、Telegram 移动审核、任务审批队列和可选的飞书/OpenClaw 协作流程串成一套可复用系统。
 
-## 语言约定
+它适合这些场景：
 
-- 默认使用中文编写对话、计划、执行说明、验收说明、README、使用文档、部署文档和项目管理文档。
-- 面向开源、外部协作或国际读者的文档可以提供中英文两个版本；中文为主版本，英文版可放在同文件的英文摘要区，或按 `docs/en/` 目录维护。
-- 代码保留字、包名、命令、API 字段、协议字段、错误原文保持原语言，避免破坏工程语义。
-- 变量名、函数名、类名、文件名沿用项目既有风格，不强行中文化。
-- 注释默认中文，但只在确实有助于理解时添加。
+- 在手机上查看 Codex CLI 任务状态。
+- 远程审批只读计划，避免 agent 直接改文件。
+- 对写文件、commit、push 做分阶段显式确认。
+- 把 AI agent 的远程办公入口做成固定命令，而不是远程 shell。
+- 在团队中演示“安全门槛优先”的 agent 审批模式。
 
-## 包含内容
+## 核心特性
 
-- `scripts/mac-codex-bridge.sh`：Mac Hermes + Codex CLI 的 Telegram 桥接脚本
-- `docs/usage.md`：系统使用说明
-- `docs/deployment.md`：部署与本地配置说明
-- `docs/development.md`：继续开发说明
-- `docs/branch-policy.md`：分支开发与主干保护规则
-- `playbooks/`：角色、协作、Codex、Hermes、飞书和 API 改造手册
-- `scripts/`：Windows WSL2 Codex CLI 启动脚本
-- `projects/`：可选 OpenClaw 多项目工作区模板
-- 飞书/OpenClaw 配置模板
-- 通用 API 框架加固与改造手册
+- Telegram quick commands：`/task_plan`、`/task_approve`、`/write_prepare`、`/commit_prepare`、`/push_prepare`
+- 只读计划模式：Codex CLI 使用 `--sandbox read-only`
+- 显式写入模式：写文件必须先有 `planned` 任务和一次性确认码
+- 任务分支隔离：写文件只发生在 `codex/<task_id>` 分支
+- 分阶段审批：write、commit、push 不共用确认码
+- 禁用 deploy：当前版本只返回禁用说明，不执行部署
+- 普通聊天不入队：Telegram 普通消息永远不会进入 Codex 任务队列
+- 本机状态隔离：token、profile state、日志、PID 和任务队列不进入 git
 
-## 快速开始
+## 工作流
 
-使用 Node.js 22：
-
-```bash
-nvm use
-npm ci
-npm run openclaw -- --version
+```mermaid
+flowchart LR
+  A["本机 inbox.txt"] --> B["/task_plan 创建任务"]
+  B --> C["/task_approve 只读计划"]
+  C --> D["planned"]
+  D --> E["/write_prepare 生成写入确认码"]
+  E --> F["/write_approve 写入任务分支"]
+  F --> G["/commit_prepare + /commit_approve"]
+  G --> H["/push_prepare + /push_approve"]
+  H --> I["GitHub Pull Request"]
 ```
 
-从模板创建项目：
-
-```bash
-cp -R projects/_template projects/my-project
-```
+## 快速体验
 
 安装并验证 Codex CLI：
 
@@ -48,6 +46,54 @@ npm install -g @openai/codex
 codex login
 codex --version
 ```
+
+克隆项目并检查脚本：
+
+```bash
+git clone https://github.com/38209930/hermes-codex-bridge.git
+cd hermes-codex-bridge
+bash -n scripts/*.sh
+```
+
+配置 Hermes Telegram profile 后，常用命令是：
+
+```text
+/codex_status
+/task_new
+/task_plan
+/task_approve
+/task_show
+/write_prepare <task_id>
+/write_approve <task_id> <code>
+/commit_prepare <task_id>
+/commit_approve <task_id> <code>
+/push_prepare <task_id>
+/push_approve <task_id> <code>
+```
+
+完整步骤见 [部署说明](docs/deployment.md) 和 [V3 显式审批写操作](docs/v3-explicit-approval.md)。
+
+## 安全模型
+
+本项目的第一原则是：远程入口必须可审计、可拒绝、可回滚。
+
+Telegram/Codex 桥接不会把 Telegram 任意文本当作 shell 命令执行。任务内容先进入本地 inbox 文件，再通过固定 Hermes quick commands 审批。只读审批后的任务使用 `--sandbox read-only` 运行 Codex CLI，并要求只输出计划、风险、验收标准和建议命令。
+
+V3 写操作必须先有只读计划，再通过 `/write_prepare <task_id>` 生成一次性确认码。写文件只在 `codex/<task_id>` 分支执行；commit 和 push 需要单独的确认码。deploy 当前版本禁用。
+
+## 适合谁使用
+
+- 经常用 Codex CLI、希望手机上验收任务的开发者。
+- 想把 AI agent 接入 Telegram，但不想把 bot 变成远程 shell 的团队。
+- 需要演示 agent 安全审批、任务分支、主干保护和审计日志的工程团队。
+- 正在搭建 Hermes、飞书、Telegram 或 OpenClaw 协作入口的用户。
+
+## 不适合什么
+
+- 不适合直接控制 Codex App 当前窗口。
+- 不适合无审批地执行任意 Telegram 文本。
+- 不适合在生产环境直接开放 deploy。
+- 不适合绕过 GitHub PR 和主干保护。
 
 ## 文档
 
@@ -60,6 +106,21 @@ codex --version
 - [Telegram + Codex 桥接](docs/telegram-codex.md)
 - [飞书/Lark + OpenClaw](docs/feishu-openclaw.md)
 - [安全说明](docs/security.md)
+- [项目传播计划](docs/marketing.md)
+
+## 包含内容
+
+- `scripts/mac-codex-bridge.sh`：Mac Hermes + Codex CLI 的 Telegram 桥接脚本
+- `scripts/hermes-enable-quick-command-args.sh`：Hermes quick command 参数补丁
+- `docs/usage.md`：系统使用说明
+- `docs/deployment.md`：部署与本地配置说明
+- `docs/development.md`：继续开发说明
+- `docs/branch-policy.md`：分支开发与主干保护规则
+- `playbooks/`：角色、协作、Codex、Hermes、飞书和 API 改造手册
+- `scripts/`：Windows WSL2 Codex CLI 启动脚本
+- `projects/`：可选 OpenClaw 多项目工作区模板
+- 飞书/OpenClaw 配置模板
+- 通用 API 框架加固与改造手册
 
 ## 目录结构
 
@@ -69,43 +130,6 @@ docs/           安装、部署、使用和安全文档
 playbooks/      协作、角色、飞书、Codex、Hermes 和 API 手册
 projects/       可选项目模板与项目记忆结构
 ```
-
-## 安全模型
-
-Telegram/Codex 桥接不会把 Telegram 任意文本当作 shell 命令执行。任务内容先进入本地 inbox 文件，再通过固定 Hermes quick commands 审批。只读审批后的任务使用 `--sandbox read-only` 运行 Codex CLI，并要求只输出计划、风险、验收标准和建议命令。
-
-V3 写操作必须先有只读计划，再通过 `/write_prepare <task_id>` 生成一次性确认码。写文件只在 `codex/<task_id>` 分支执行；commit 和 push 需要单独的确认码。deploy 当前版本禁用。
-
-## Telegram/Codex 桥接
-
-Mac 桥接建议使用独立 Hermes profile，通常命名为 `telegram-codex`。
-
-常用命令：
-
-```text
-/codex_help
-/codex_status
-/diff
-/codex_review
-/task_new
-/task_plan
-/task_list
-/task_show
-/task_approve
-/task_retry
-/task_cancel
-/task_reject
-/write_prepare <task_id>
-/write_approve <task_id> <code>
-/write_reject <task_id>
-/commit_prepare <task_id>
-/commit_approve <task_id> <code>
-/push_prepare <task_id>
-/push_approve <task_id> <code>
-/deploy_prepare <task_id>
-```
-
-完整配置见 [Telegram + Codex 桥接](docs/telegram-codex.md)。
 
 ## 飞书/Lark
 
@@ -128,6 +152,14 @@ npm install -g @openai/codex
 所有贡献都应从功能分支提交，通过 Pull Request 合并。`master` 是受保护主干，不允许日常开发直接 push。
 
 详见 [分支与主干保护](docs/branch-policy.md)。
+
+## 语言约定
+
+- 默认使用中文编写对话、计划、执行说明、验收说明、README、使用文档、部署文档和项目管理文档。
+- 面向开源、外部协作或国际读者的文档可以提供中英文两个版本；中文为主版本，英文版可放在同文件的英文摘要区，或按 `docs/en/` 目录维护。
+- 代码保留字、包名、命令、API 字段、协议字段、错误原文保持原语言，避免破坏工程语义。
+- 变量名、函数名、类名、文件名沿用项目既有风格，不强行中文化。
+- 注释默认中文，但只在确实有助于理解时添加。
 
 ## 开源卫生
 
