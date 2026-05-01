@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Local OS/editor files
+.DS_Store
+*.swp
+*.swo
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+.hermes/
+*.log
+
+# Runtime state
+tasks.jsonl
+workspace/tasks/
+*.pid
+*.lock
+
+# Private or generated data
+migration/
+__pycache__/
+*.pyc
+
+# Build/cache output
+.cache/
+dist/
+build/
+coverage/
+

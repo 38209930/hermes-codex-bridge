@@ -1,0 +1,28 @@
+{
+  channels: {
+    feishu: {
+      enabled: true,
+      domain: "feishu",
+      connectionMode: "websocket",
+      defaultAccount: "main",
+      dmPolicy: "pairing",
+      groupPolicy: "open",
+      // Keep mention required in groups for the first rollout.
+      groups: {
+        // Replace with the real Feishu chat_id after your first group test.
+        // "oc_xxx": { requireMention: true, enabled: true },
+      },
+      accounts: {
+        main: {
+          appId: "REPLACE_WITH_FEISHU_APP_ID",
+          appSecret: "REPLACE_WITH_FEISHU_APP_SECRET",
+          botName: "REPLACE_WITH_FEISHU_BOT_NAME"
+        }
+      }
+    }
+  },
+  plugins: {
+    // Pin trusted plugin ids to avoid auto-loading surprises.
+    allow: ["feishu"]
+  }
+}
