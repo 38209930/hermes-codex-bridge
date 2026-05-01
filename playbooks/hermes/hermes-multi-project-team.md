@@ -38,7 +38,7 @@ $HOME/Documents
 
 ## 常用命令
 ```bash
-cd "$HOME/projects/openclaw-codex-bridge"
+cd "$HOME/projects/hermes-codex-bridge"
 
 # 团队隔离巡检
 ./scripts/hermes-team-audit.sh
@@ -47,7 +47,7 @@ cd "$HOME/projects/openclaw-codex-bridge"
 ./scripts/hermes-reload-bot-soul.sh feishu-bot3
 
 # 切 bot 到某个项目目录
-./scripts/hermes-switch-bot-project.sh feishu-bot2 "$HOME/projects/openclaw-codex-bridge"
+./scripts/hermes-switch-bot-project.sh feishu-bot2 "$HOME/projects/hermes-codex-bridge"
 
 # 切回 bot 自己的 workspace
 ./scripts/hermes-switch-bot-project.sh feishu-bot2 --reset

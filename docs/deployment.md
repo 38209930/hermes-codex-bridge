@@ -105,5 +105,21 @@ gh auth login
 ```bash
 git add .
 git commit -m "Prepare open source release"
-gh repo create openclaw-codex-bridge --public --source . --remote origin --push
+gh repo create hermes-codex-bridge --public --source . --remote origin --push
 ```
+
+## 本机推荐目录
+
+Mac 侧推荐把仓库放在 SSD 工作目录：
+
+```bash
+cd "/Volumes/SSD/myot/AI-WORK/hermes-codex-bridge"
+```
+
+如果需要兼容旧 Codex App 会话，可以保留旧路径 symlink：
+
+```bash
+/Users/chaofengsong/Documents/New project -> /Volumes/SSD/myot/AI-WORK/hermes-codex-bridge
+```
+
+Hermes `telegram-codex` profile 中的 `terminal.cwd`、quick commands 和 `.env` 里的 `MAC_CODEX_BRIDGE_WORKDIR` 都应指向这个 SSD 目录。

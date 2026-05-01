@@ -1,8 +1,8 @@
 {
-  "name": "openclaw-codex-bridge",
+  "name": "hermes-codex-bridge",
   "private": true,
   "version": "0.1.0",
-  "description": "OpenClaw workspace templates and Hermes/Codex bridge playbooks for Telegram and Feishu workflows",
+  "description": "Hermes and Codex bridge toolkit for Telegram review, mobile approval, and optional OpenClaw/Feishu workflows",
   "scripts": {
     "openclaw": "openclaw"
   },

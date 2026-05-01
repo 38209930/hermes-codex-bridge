@@ -1,8 +1,8 @@
-# openclaw-codex-bridge
+# hermes-codex-bridge
 
-这是一个开源工作台模板与桥接脚本集合，用于把 OpenClaw、Hermes、Codex、本地开发、Telegram 审核和飞书/Lark 协作串成一套可复用流程。
+这是一个 Hermes + Codex 桥接工具包，用于把本地 Codex CLI、Telegram 移动审核、任务审批队列和可选的飞书/OpenClaw 协作流程串成一套可复用系统。
 
-本仓库默认走保守路线：Telegram/Codex 桥接只读执行，飞书凭证只提供模板，本机运行状态不进入 git。
+本仓库默认走保守路线：Telegram/Codex 桥接只读执行，飞书凭证只提供模板，本机运行状态不进入 git。OpenClaw 是可选协作模板，不是本项目的主入口。
 
 ## 语言约定
 
@@ -14,10 +14,14 @@
 
 ## 包含内容
 
-- `projects/`：OpenClaw 多项目工作区模板
-- `playbooks/`：角色、协作、Codex、Hermes、飞书和 API 改造手册
 - `scripts/mac-codex-bridge.sh`：Mac Hermes + Codex CLI 的 Telegram 桥接脚本
+- `docs/usage.md`：系统使用说明
+- `docs/deployment.md`：部署与本地配置说明
+- `docs/development.md`：继续开发说明
+- `docs/branch-policy.md`：分支开发与主干保护规则
+- `playbooks/`：角色、协作、Codex、Hermes、飞书和 API 改造手册
 - `scripts/`：Windows WSL2 Codex CLI 启动脚本
+- `projects/`：可选 OpenClaw 多项目工作区模板
 - 飞书/OpenClaw 配置模板
 - 通用 API 框架加固与改造手册
 
@@ -47,8 +51,10 @@ codex --version
 
 ## 文档
 
+- [使用说明](docs/usage.md)
 - [开发说明](docs/development.md)
 - [部署说明](docs/deployment.md)
+- [分支与主干保护](docs/branch-policy.md)
 - [Telegram + Codex 桥接](docs/telegram-codex.md)
 - [飞书/Lark + OpenClaw](docs/feishu-openclaw.md)
 - [安全说明](docs/security.md)
@@ -56,10 +62,10 @@ codex --version
 ## 目录结构
 
 ```text
-projects/       可复用项目模板与项目记忆结构
-playbooks/      协作、角色、飞书、Codex、Hermes 和 API 手册
 scripts/        Hermes、Codex CLI、Telegram 和 WSL 本地辅助脚本
 docs/           安装、部署、使用和安全文档
+playbooks/      协作、角色、飞书、Codex、Hermes 和 API 手册
+projects/       可选项目模板与项目记忆结构
 ```
 
 ## 安全模型
@@ -106,6 +112,12 @@ npm install -g @openai/codex
 ```
 
 详见 [部署说明](docs/deployment.md)。
+
+## 开发协作
+
+所有贡献都应从功能分支提交，通过 Pull Request 合并。`master` 是受保护主干，不允许日常开发直接 push。
+
+详见 [分支与主干保护](docs/branch-policy.md)。
 
 ## 开源卫生
 

@@ -1,5 +1,7 @@
 # 开发说明
 
+本项目的主线是 Hermes + Codex 桥接；OpenClaw 相关内容是可选协作模板和示例工程，不是仓库命名或使用入口。
+
 ## 环境要求
 
 - macOS 或 Linux，用于运行 shell 脚本
@@ -65,8 +67,12 @@ cp -R projects/_template projects/my-project
 
 ## 贡献规则
 
+- 日常开发必须从功能分支开始，不直接提交到 `master`。
+- 修改完成后通过 Pull Request 合并到 `master`。
 - 凭证不要进入 git。
 - 生成的运行状态不要进入 git。
 - 使用模板占位符，不提交真实租户、应用或用户标识。
 - 桥接命令保持固定和显式，不从聊天文本直接执行 shell。
 - 修改脚本参数、环境变量或命令名时，同步更新文档。
+
+详见 [分支与主干保护](branch-policy.md)。
