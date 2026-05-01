@@ -4,7 +4,7 @@
 
 ## 目标
 
-把 Telegram 作为本地 Codex CLI 计划任务的移动审批和审核入口。桥接设计以安全优先：Telegram 不执行任意 shell 文本，Codex CLI 以只读模式运行。
+把 Telegram 作为本地 Codex CLI 计划任务的移动审批和审核入口。桥接设计以安全优先：Telegram 不执行任意 shell 文本，普通聊天永远不进入 Codex 队列。V3 支持显式审批写文件、commit 和 push；每一步都需要 `task_id` 和一次性确认码。
 
 ## 架构
 
@@ -14,6 +14,7 @@ Telegram
   -> fixed quick commands
   -> scripts/mac-codex-bridge.sh
   -> Codex CLI read-only planning
+  -> optional explicit write/commit/push approval
   -> task result back to Telegram
 ```
 
@@ -52,9 +53,24 @@ TELEGRAM_REQUIRE_MENTION=true
 /task_retry
 /task_cancel
 /task_reject
+/write_prepare
+/write_approve
+/write_reject
+/commit_prepare
+/commit_approve
+/push_prepare
+/push_approve
+/deploy_prepare
 ```
 
 quick commands 刻意不接收任意任务文本。这样可以避免命令注入，并把所有可执行行为收敛到可审计的本地脚本里。
+
+V3 需要启用本仓库提供的 Hermes 参数补丁。补丁只把 slash command 参数放入环境变量，不拼接 shell：
+
+```bash
+scripts/hermes-enable-quick-command-args.sh
+hermes --profile telegram-codex gateway restart
+```
 
 ## 任务队列流程
 
@@ -128,3 +144,18 @@ prompt 要求 Codex 只输出：
 - 建议命令
 
 不得修改文件、安装依赖、commit、push、部署或运行迁移。
+
+## V3 显式审批
+
+当 `/task_approve` 完成只读计划后，可以继续：
+
+```text
+/write_prepare <task_id>
+/write_approve <task_id> <code>
+/commit_prepare <task_id>
+/commit_approve <task_id> <code>
+/push_prepare <task_id>
+/push_approve <task_id> <code>
+```
+
+写文件只发生在 `codex/<task_id>` 分支。commit 和 push 分别审批，push 后通过 GitHub PR 合并。`/deploy_prepare <task_id>` 永远只返回禁用说明，不执行部署。

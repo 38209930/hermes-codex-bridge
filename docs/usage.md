@@ -6,13 +6,13 @@
 
 `hermes-codex-bridge` 的核心用途是把本机 Codex CLI 接入 Hermes gateway，让你可以在 Telegram 上查看状态、触发只读 review、创建任务、审批任务，并把结果返回到手机端。
 
-当前版本默认只读：
+默认安全入口仍然是只读计划：
 
 - Telegram 普通聊天永远不进入 Codex 任务队列
 - 不从 Telegram 文本直接执行 shell
-- 不让 Codex CLI 写文件
-- 不 commit、push、部署或运行迁移
-- 审批后的任务只输出计划、风险、验收标准和建议命令
+- `/task_approve` 只让 Codex CLI 输出计划、风险、验收标准和建议命令
+
+V3 新增写文件、commit、push 的显式审批流程，但必须先有只读计划，并且每一步都要单独确认。deploy 仍然禁用。
 
 ## 启动前提
 
@@ -47,6 +47,14 @@ hermes --profile telegram-codex gateway restart
 /task_retry
 /task_cancel
 /task_reject
+/write_prepare <task_id>
+/write_approve <task_id> <code>
+/write_reject <task_id>
+/commit_prepare <task_id>
+/commit_approve <task_id> <code>
+/push_prepare <task_id>
+/push_approve <task_id> <code>
+/deploy_prepare <task_id>
 ```
 
 ## 典型任务流程
@@ -87,6 +95,43 @@ hermes --profile telegram-codex gateway restart
    /task_show
    ```
 
+## V3 显式写入流程
+
+只读计划完成后，任务状态会变成 `planned`。这时可以进入写文件审批：
+
+```text
+/write_prepare t20260501-130501
+/write_approve t20260501-130501 ABC123
+```
+
+写入只会发生在自动创建的任务分支：
+
+```text
+codex/t20260501-130501
+```
+
+写入完成后，如果需要提交：
+
+```text
+/commit_prepare t20260501-130501
+/commit_approve t20260501-130501 DEF456
+```
+
+如果需要推送任务分支：
+
+```text
+/push_prepare t20260501-130501
+/push_approve t20260501-130501 GHI789
+```
+
+push 之后仍然需要通过 GitHub Pull Request 合并到 `master`。bridge 不会直接合并主干。
+
+deploy 当前版本不开放：
+
+```text
+/deploy_prepare t20260501-130501
+```
+
 ## 本机命令
 
 在项目目录中运行：
@@ -108,4 +153,4 @@ scripts/mac-codex-bridge.sh status
 
 普通 Telegram 聊天不会进入队列，这是一条长期安全规则，不是临时限制。任何 Codex CLI 调用都必须来自固定 quick command 或本地显式命令。
 
-如果要进入写文件、commit、push 或部署能力，必须另开版本设计，并加入明确 task id 审批、审计日志和回滚策略。
+写文件、commit、push 已在 V3 中拆分成三个审批阶段；每个阶段都有独立一次性确认码和审计日志。部署能力必须另行设计，不能复用当前确认码或普通聊天入口。

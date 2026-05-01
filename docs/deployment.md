@@ -59,15 +59,44 @@ hermes --profile telegram-codex gateway restart
 部署验收标准：
 
 - `gateway status` 显示 launchd service 已 loaded
-- quick commands 能加载 `/codex_status`、`/task_list`、`/task_approve`
+- quick commands 能加载 `/codex_status`、`/task_list`、`/task_approve` 和 V3 审批命令
 - Telegram 普通聊天不会自动进入 Codex 任务队列
 - Codex CLI 调用只能通过固定 quick command 或本机显式命令触发
+
+## Hermes quick command 参数补丁
+
+V3 的 `/write_prepare <task_id>`、`/write_approve <task_id> <code>` 等命令需要 Hermes 把 slash command 参数传给 bridge。当前本地补丁只通过环境变量传递参数，不把参数拼进 shell command：
+
+```bash
+cd "/Volumes/SSD/myot/AI-WORK/hermes-codex-bridge"
+scripts/hermes-enable-quick-command-args.sh --check
+scripts/hermes-enable-quick-command-args.sh
+scripts/hermes-enable-quick-command-args.sh --check
+hermes --profile telegram-codex gateway restart
+```
+
+可回滚：
+
+```bash
+scripts/hermes-enable-quick-command-args.sh --restore
+hermes --profile telegram-codex gateway restart
+```
+
+补丁提供的环境变量：
+
+```text
+HERMES_QUICK_COMMAND_NAME
+HERMES_QUICK_COMMAND_ARGS
+HERMES_QUICK_COMMAND_RAW
+```
+
+bridge 只接受白名单格式的 `task_id` 和一次性确认码，特殊字符会被拒绝。
 
 ## macOS launchd 注意事项
 
 Telegram 任务 runner 使用 `launchctl submit` 启动后台 Codex 计划任务。为了避开 macOS 对用户文档目录的隐私限制，runner 会先把脚本快照复制到 Hermes profile 的任务目录，再启动后台任务。
 
-Hermes gateway 本身也通过 launchd service 管理。bridge 不需要单独常驻进程；只要 `telegram-codex` gateway loaded，Telegram quick commands 就会调用本仓库脚本。
+Hermes gateway 本身也通过 launchd service 管理。bridge 不需要单独常驻进程；只要 `telegram-codex` gateway loaded，Telegram quick commands 就会调用本仓库脚本。V3 写入 runner 也由 bridge 在审批后通过 launchd 临时启动。
 
 运行态文件位于：
 
