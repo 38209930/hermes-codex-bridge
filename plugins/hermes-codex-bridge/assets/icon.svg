@@ -1,0 +1,8 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hermes Codex Bridge">
+  <rect width="256" height="256" rx="48" fill="#0F172A"/>
+  <path d="M61 132c0-37 30-67 67-67s67 30 67 67-30 67-67 67-67-30-67-67Z" fill="#2563EB"/>
+  <path d="M88 132h80" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round"/>
+  <path d="M128 92v80" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round"/>
+  <path d="M75 74l22-22M181 74l-22-22" stroke="#38BDF8" stroke-width="10" stroke-linecap="round"/>
+  <path d="M79 181l20 20M177 181l-20 20" stroke="#38BDF8" stroke-width="10" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,45 @@
+{
+  "name": "hermes-codex-bridge",
+  "version": "0.1.0",
+  "description": "Deploy and operate a safe Telegram approval bridge for Codex CLI tasks.",
+  "author": {
+    "name": "song",
+    "email": "38209930@qq.com",
+    "url": "https://github.com/38209930"
+  },
+  "homepage": "https://github.com/38209930/hermes-codex-bridge",
+  "repository": "https://github.com/38209930/hermes-codex-bridge",
+  "license": "MIT",
+  "keywords": [
+    "codex-cli",
+    "telegram",
+    "hermes",
+    "ai-agent",
+    "approval-workflow",
+    "agent-safety"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Hermes Codex Bridge",
+    "shortDescription": "Safe Telegram approvals for Codex CLI tasks.",
+    "longDescription": "Guide Codex through deploying, verifying, and troubleshooting hermes-codex-bridge: a Telegram + Hermes approval layer for Codex CLI with read-only planning, explicit write/commit/push approvals, task branches, and a hard rule that ordinary chat never enters the task queue.",
+    "developerName": "song",
+    "category": "Productivity",
+    "capabilities": [
+      "Guidance",
+      "Automation",
+      "Developer Tools"
+    ],
+    "websiteURL": "https://github.com/38209930/hermes-codex-bridge",
+    "privacyPolicyURL": "https://github.com/38209930/hermes-codex-bridge/blob/master/docs/security.md",
+    "termsOfServiceURL": "https://github.com/38209930/hermes-codex-bridge/blob/master/LICENSE",
+    "defaultPrompt": [
+      "帮我部署 hermes-codex-bridge",
+      "检查 Telegram bridge 为什么没响应",
+      "验证 V3 显式审批是否安全"
+    ],
+    "brandColor": "#2563EB",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/icon.svg"
+  }
+}

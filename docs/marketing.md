@@ -60,6 +60,26 @@ automation
 - Issues templates：区分 bug、feature request、deployment help。
 - 第一个 release：`v0.1.0`，说明当前能力和安全边界。
 
+## Codex Plugin 分发
+
+本项目已经提供 repo-local Codex Plugin：
+
+```text
+plugins/hermes-codex-bridge/
+```
+
+GitHub 安装命令：
+
+```bash
+codex plugin marketplace add 38209930/hermes-codex-bridge --ref master
+```
+
+传播时可以这样说：
+
+```text
+你可以把 hermes-codex-bridge 作为 Codex Plugin 安装。安装后，Codex 会自动知道如何部署 Hermes + Telegram bridge、验证 V3 显式审批、排查 quick command 参数和保护“普通聊天永不入队”的安全边界。
+```
+
 ## 发布顺序
 
 1. GitHub 仓库首页
