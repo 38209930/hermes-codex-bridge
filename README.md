@@ -55,6 +55,7 @@ codex --version
 - [开发说明](docs/development.md)
 - [部署说明](docs/deployment.md)
 - [分支与主干保护](docs/branch-policy.md)
+- [未来写操作能力设计原则](docs/future-write-capabilities.md)
 - [Telegram + Codex 桥接](docs/telegram-codex.md)
 - [飞书/Lark + OpenClaw](docs/feishu-openclaw.md)
 - [安全说明](docs/security.md)
