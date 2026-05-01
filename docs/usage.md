@@ -8,10 +8,28 @@
 
 当前版本默认只读：
 
+- Telegram 普通聊天永远不进入 Codex 任务队列
 - 不从 Telegram 文本直接执行 shell
 - 不让 Codex CLI 写文件
 - 不 commit、push、部署或运行迁移
 - 审批后的任务只输出计划、风险、验收标准和建议命令
+
+## 启动前提
+
+Telegram `/` 命令能够工作，是因为 Hermes `telegram-codex` gateway 已经启动并加载了 quick commands。使用前先检查 bridge 状态：
+
+```bash
+hermes --profile telegram-codex gateway status
+```
+
+启动或重启：
+
+```bash
+hermes --profile telegram-codex gateway start
+hermes --profile telegram-codex gateway restart
+```
+
+在 macOS 上，Hermes gateway 使用 launchd service 运行。只要该服务处于 loaded 状态，bridge 就会随 Hermes gateway 启动方式恢复；修改 quick commands、脚本路径或 `.env` 后，应执行 `gateway restart`。
 
 ## 常用 Telegram 命令
 
@@ -88,4 +106,6 @@ scripts/mac-codex-bridge.sh status
 
 ## 安全边界
 
-如果要进入写文件、commit、push 或部署能力，应另开版本设计，并加入明确 task id 审批、审计日志和回滚策略。
+普通 Telegram 聊天不会进入队列，这是一条长期安全规则，不是临时限制。任何 Codex CLI 调用都必须来自固定 quick command 或本地显式命令。
+
+如果要进入写文件、commit、push 或部署能力，必须另开版本设计，并加入明确 task id 审批、审计日志和回滚策略。

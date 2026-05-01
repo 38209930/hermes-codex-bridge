@@ -48,9 +48,26 @@ telegram-codex gateway status
 telegram-codex gateway restart
 ```
 
+也可以使用 Hermes 原生命令检查和管理 bridge：
+
+```bash
+hermes --profile telegram-codex gateway status
+hermes --profile telegram-codex gateway start
+hermes --profile telegram-codex gateway restart
+```
+
+部署验收标准：
+
+- `gateway status` 显示 launchd service 已 loaded
+- quick commands 能加载 `/codex_status`、`/task_list`、`/task_approve`
+- Telegram 普通聊天不会自动进入 Codex 任务队列
+- Codex CLI 调用只能通过固定 quick command 或本机显式命令触发
+
 ## macOS launchd 注意事项
 
 Telegram 任务 runner 使用 `launchctl submit` 启动后台 Codex 计划任务。为了避开 macOS 对用户文档目录的隐私限制，runner 会先把脚本快照复制到 Hermes profile 的任务目录，再启动后台任务。
+
+Hermes gateway 本身也通过 launchd service 管理。bridge 不需要单独常驻进程；只要 `telegram-codex` gateway loaded，Telegram quick commands 就会调用本仓库脚本。
 
 运行态文件位于：
 

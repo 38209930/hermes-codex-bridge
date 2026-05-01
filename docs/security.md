@@ -44,12 +44,22 @@ git diff --cached --name-only
 
 Telegram 桥接刻意采用固定命令模式：
 
+- Telegram 普通聊天永远不自动进入 Codex 任务队列
 - 不把 Telegram 文本直接当 shell 执行
+- 任何 Codex CLI 调用必须由固定 quick command、本机脚本或明确审批动作触发
 - Codex CLI 计划模式没有写权限
 - 不安装依赖
 - 不 commit、push、部署或迁移
 
-未来如果加入写文件能力，必须要求明确的 task id 审批，并保留独立审计日志。
+这条“普通聊天不入队”是长期安全边界，后续版本不得加入普通消息自动入队功能。
+
+未来如果加入写文件、commit、push 或 deploy 能力，必须另行设计，至少满足：
+
+- 明确的 task id
+- 显式审批命令
+- 操作前计划与风险展示
+- 操作后审计日志
+- 可回滚说明
 
 ## 模板策略
 
