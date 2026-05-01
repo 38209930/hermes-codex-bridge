@@ -1,6 +1,6 @@
 # Telegram + Codex 桥接
 
-本文默认使用中文说明 Telegram 与 Codex 的接入方式。命令、环境变量和 Telegram 原始返回保持原样。
+本文默认使用中文说明 Telegram 与 Codex 的接入方式。需要面向开源或外部协作时，可以提供英文版或英文摘要。命令、环境变量和 Telegram 原始返回保持原样。
 
 ## 目标
 

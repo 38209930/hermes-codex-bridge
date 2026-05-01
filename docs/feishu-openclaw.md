@@ -1,6 +1,6 @@
 # 飞书/Lark + OpenClaw
 
-本文默认使用中文说明飞书/Lark 与 OpenClaw 的接入方式。`App ID`、`App Secret`、事件名和配置字段保持原样。
+本文默认使用中文说明飞书/Lark 与 OpenClaw 的接入方式。需要面向开源或外部协作时，可以提供英文版或英文摘要。`App ID`、`App Secret`、事件名和配置字段保持原样。
 
 ## 目标
 
