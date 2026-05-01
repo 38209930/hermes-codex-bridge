@@ -19,6 +19,7 @@ Codex 会加载插件里的 skill，按项目约定执行：
 - 配置 Telegram bridge
 - 应用 Hermes quick command 参数补丁
 - 验证 `/task_*`、`/write_*`、`/commit_*`、`/push_*`
+- 验证 Hermes gateway 已通过 launchd 自启动
 - 保护“普通聊天永不入队”的安全边界
 
 ## GitHub 安装方式
@@ -85,6 +86,25 @@ plugins/hermes-codex-bridge/.codex-plugin/plugin.json
 - write、commit、push 分阶段审批
 - deploy 当前版本禁用
 - 不输出 token、secret、`.env` 或 API key
+
+## 自启动检查
+
+插件引导部署时，应把自启动作为必查项。Telegram bridge 没有常驻进程，真正常驻的是 Hermes gateway：
+
+```bash
+hermes --profile telegram-codex gateway status
+plutil -p ~/Library/LaunchAgents/ai.hermes.gateway-telegram-codex.plist
+launchctl print gui/$(id -u)/ai.hermes.gateway-telegram-codex
+```
+
+期望：
+
+```text
+RunAtLoad => true
+state = running
+```
+
+如果没有自启动，应先修复 Hermes gateway 的 launchd service，再验证 Telegram quick commands。
 
 ## 官方插件库准备
 

@@ -22,6 +22,7 @@
 - 禁用 deploy：当前版本只返回禁用说明，不执行部署
 - 普通聊天不入队：Telegram 普通消息永远不会进入 Codex 任务队列
 - 本机状态隔离：token、profile state、日志、PID 和任务队列不进入 git
+- 开机可用：Hermes gateway 通过 macOS launchd 自启动，bridge 随 quick command 调用工作
 
 ## 工作流
 
@@ -72,6 +73,23 @@ bash -n scripts/*.sh
 ```
 
 完整步骤见 [部署说明](docs/deployment.md) 和 [V3 显式审批写操作](docs/v3-explicit-approval.md)。
+
+## 自启动要求
+
+Telegram 审批链路依赖 Hermes gateway 常驻。Mac 侧应确保 `telegram-codex` profile 已安装为 launchd LaunchAgent，并满足：
+
+- `RunAtLoad=true`
+- service 已 loaded
+- service 正在 running
+
+检查：
+
+```bash
+hermes --profile telegram-codex gateway status
+launchctl print gui/$(id -u)/ai.hermes.gateway-telegram-codex
+```
+
+bridge 不需要单独常驻服务；它由 Hermes quick commands 按需调用。任务 runner 会在审批后临时由 launchd 启动。
 
 ## 安全模型
 

@@ -27,6 +27,7 @@ The goal is convenience without weakening the safety model. The bridge is not a 
 - Configure Telegram bot token and allowed numeric user id in the profile `.env`.
 - Configure Hermes quick commands that call `scripts/mac-codex-bridge.sh`.
 - Apply and verify the Hermes quick command args patch.
+- Verify Hermes gateway launchd auto-start.
 - Validate the V2.5 read-only queue.
 - Validate the V3 explicit approval flow.
 - Explain safe extension points for Feishu, Slack, Discord, or team approval.
@@ -54,6 +55,20 @@ The goal is convenience without weakening the safety model. The bridge is not a 
    ```bash
    hermes --profile telegram-codex gateway status
    hermes --profile telegram-codex gateway restart
+   ```
+
+   Self-start is required for the Telegram flow. Check launchd:
+
+   ```bash
+   plutil -p ~/Library/LaunchAgents/ai.hermes.gateway-telegram-codex.plist
+   launchctl print gui/$(id -u)/ai.hermes.gateway-telegram-codex
+   ```
+
+   Expected:
+
+   ```text
+   RunAtLoad => true
+   state = running
    ```
 
 4. Apply quick command argument support when V3 commands need `<task_id>` or `<code>`.
@@ -139,6 +154,8 @@ Deploy must remain disabled.
 If Telegram does not respond:
 
 - Check `hermes --profile telegram-codex gateway status`.
+- Check the launchd plist has `RunAtLoad=true`.
+- Check `launchctl print gui/$(id -u)/ai.hermes.gateway-telegram-codex` shows `state = running`.
 - Check the profile `.env` exists and contains Telegram variables without printing their values.
 - Check `TELEGRAM_ALLOWED_USERS` matches the Telegram numeric user id.
 - Restart the gateway after config changes.
