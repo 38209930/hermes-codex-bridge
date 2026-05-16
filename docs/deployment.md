@@ -94,6 +94,8 @@ HERMES_QUICK_COMMAND_RAW
 
 bridge 只接受白名单格式的 `task_id` 和一次性确认码，特殊字符会被拒绝。
 
+补丁和 gateway 运行维护必须遵守 [运行维护原则](operations-principles.md)：补丁最小化、可检查、可恢复；改动后重启所有受影响 gateway；使用 fresh log 验证平台连接；普通聊天不得进入 Codex 队列。
+
 ## macOS launchd 注意事项
 
 Telegram 任务 runner 使用 `launchctl submit` 启动后台 Codex 计划任务。为了避开 macOS 对用户文档目录的隐私限制，runner 会先把脚本快照复制到 Hermes profile 的任务目录，再启动后台任务。

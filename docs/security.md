@@ -56,6 +56,12 @@ Telegram 桥接刻意采用固定命令模式：
 
 这条“普通聊天不入队”是长期安全边界，后续版本不得加入普通消息自动入队功能。
 
+## Hermes 补丁与运维原则
+
+Hermes 本体源码补丁必须最小化，并通过可检查、可恢复的脚本管理。修改 Hermes、profile `.env`、quick commands、代理或 Codex CLI 路径后，必须重启所有受影响 gateway，并使用 fresh log 验证实际平台连接。
+
+详细规则见 [运行维护原则](operations-principles.md)。
+
 V3 已加入写文件、commit、push 的最低审批门槛，必须满足：
 
 - 明确的 task id
