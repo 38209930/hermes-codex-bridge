@@ -114,7 +114,6 @@ def patch_gateway(path: Path):
                             )
 """
     new = f"""                            # {marker}
-                            import os
                             quick_env = os.environ.copy()
                             quick_env["HERMES_QUICK_COMMAND_NAME"] = command
                             quick_env["HERMES_QUICK_COMMAND_ARGS"] = event.get_command_args().strip()
