@@ -524,7 +524,12 @@ print_status() {
 
   log_section "Versions"
   hermes --version 2>/dev/null | sed -n '1,4p' || true
-  codex --version 2>/dev/null || true
+  if [[ -n "$CODEX_BIN" ]]; then
+    printf 'Codex CLI: %s\n' "$CODEX_BIN"
+    "$CODEX_BIN" --version 2>/dev/null || true
+  else
+    printf 'Codex CLI: not found. Set CODEX_BRIDGE_CODEX_BIN or install codex on PATH.\n'
+  fi
 
   if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     log_section "Git"
